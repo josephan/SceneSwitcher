@@ -20,7 +20,6 @@ namespace SceneSwitcher.Editor
         private bool wasCompleteSceneSearchPerformed;
         private string displayMessage;
         private System.Action delayedAction;
-        private Texture2D backgroundTexture;
         private GUIStyle sceneButtonStyle;
         private GUIStyle highlightButtonStyle;
         private GUIStyle indexLabelStyle;
@@ -480,8 +479,6 @@ namespace SceneSwitcher.Editor
                 RefreshScenePathTexts();
             }
 
-            DrawBackground();
-
             string displayMessage = this.displayMessage;
             if (!string.IsNullOrEmpty(displayMessage))
             {
@@ -584,64 +581,6 @@ namespace SceneSwitcher.Editor
             GUILayout.Space(2);
             GUILayout.EndVertical();
             GUILayout.EndScrollView();
-        }
-
-        protected virtual void DrawBackground()
-        {
-            Texture backgroundTexture = GetBackgroundTexture();
-            if (backgroundTexture && backgroundTexture.width > 0 && backgroundTexture.height > 0)
-            {
-                var drawArea = new Rect(0, 0, position.width, position.height);
-                const bool alphaBlend = true;
-
-                if (backgroundTexture.wrapMode == TextureWrapMode.Repeat)
-                {
-                    var uvCoordinated = new Rect(0, 0, drawArea.width / backgroundTexture.width, drawArea.height / backgroundTexture.height);
-                    GUI.DrawTextureWithTexCoords(drawArea, backgroundTexture, uvCoordinated, alphaBlend);
-                }
-                else
-                {
-                    GUI.DrawTexture(drawArea, backgroundTexture, ScaleMode.ScaleAndCrop, alphaBlend);
-                }
-            }
-        }
-
-        protected virtual Texture GetBackgroundTexture()
-        {
-            if (!backgroundTexture)
-            {
-                const float alpha = 0.125f;
-                backgroundTexture = new Texture2D(4, 4, TextureFormat.ARGB32, false)
-                {
-                    hideFlags = HideFlags.HideAndDontSave,
-                    wrapMode = TextureWrapMode.Repeat
-                };
-
-                float lineScale = backgroundTexture.width;
-                for (int x = 0, width = backgroundTexture.width; x < width; x++)
-                {
-                    for (int y = 0, height = backgroundTexture.height; y < height; y++)
-                    {
-                        float greyscale = ((x - y + height) / lineScale) % 1.0f;
-                        greyscale = Mathf.Abs(greyscale * 2.0f - 1.0f);
-                        Color color = new Color(greyscale, greyscale, greyscale, alpha);
-                        backgroundTexture.SetPixel(x, y, color);
-                    }
-                }
-
-                backgroundTexture.Apply();
-            }
-
-            return backgroundTexture;
-        }
-
-        protected virtual void OnDestroy()
-        {
-            if (backgroundTexture)
-            {
-                Object.DestroyImmediate(backgroundTexture, false);
-                backgroundTexture = null;
-            }
         }
 
         protected virtual void AddExtraScenePaths(bool isFullSearchRequested)

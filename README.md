@@ -97,7 +97,3 @@ All preferences are automatically managed and persist between Unity sessions.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Credits
-
-This package is a modernized and refactored version inspired by community scene management tools.
