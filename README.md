@@ -22,7 +22,7 @@ A Unity Editor extension to quickly open recent scenes with keyboard shortcuts a
 4. Select **Add package from git URL...**
 5. Paste the following URL:
    ```
-   https://github.com/YOUR_USERNAME/SceneSwitcher.git
+   https://github.com/josephan/SceneSwitcher.git
    ```
 6. Click **Add**
 
